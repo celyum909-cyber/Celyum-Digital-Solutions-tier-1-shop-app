@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shop App Live Demo</title>
+<meta name="description" content="Try the customer shop app and the owner app side by side. Sample data only, no real payments.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a short intro, two live phones side by side (one at a time with a switch on small screens), the video tour underneath. */
+:root{
+  --night:#03101f; --navy:#072448; --teal:#4ed4d2; --gold:#ffcb00; --coral:#ff6150; --amber:#f8a94b;
+  --ink:#eef3fa; --mute:#93a4bb; --line:rgba(238,243,250,.12); --card:rgba(255,255,255,.04);
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--night);color:var(--ink)}
+/* Gentle snapping: near the phones the page settles with them centred, near the video it settles on the video. */
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+.intro{scroll-snap-align:start;scroll-margin-top:28px}
+.phones{scroll-snap-align:center}
+.video{scroll-snap-align:center}
+.wrap::after{content:"";height:25vh}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font:16px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:max(28px,env(safe-area-inset-top,0px)) max(40px,env(safe-area-inset-bottom,0px));
+  background:radial-gradient(900px 600px at 80% 0%,rgba(78,212,210,.10),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(255,97,80,.07),transparent 60%),var(--night);min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:34px}
+.intro{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(28px,5vw,64px);align-items:center}
+.intro-text{display:grid;gap:14px;min-width:0}
+.kick{font:800 13px/1 var(--body);letter-spacing:2.6px;text-transform:uppercase;color:var(--amber)}
+h1{font:800 clamp(34px,5.4vw,60px)/1.03 var(--display);letter-spacing:-1px;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--teal)}
+.intro p{margin:0;font-size:clamp(16px,1.9vw,19px);color:var(--mute);max-width:560px;text-wrap:pretty}
+.howto{min-width:0;display:grid;gap:18px;padding:24px 24px 26px;border-radius:20px;background:linear-gradient(160deg,rgba(78,212,210,.08),rgba(255,255,255,.03));border:1px solid var(--line)}
+.howto ol{list-style:none;margin:0;padding:0;display:grid;gap:18px;position:relative}
+.howto li:not(:last-child)::after{content:"";position:absolute;left:15px;top:32px;bottom:-18px;width:2px;background:rgba(78,212,210,.45)}
+.howto li{display:flex;gap:14px;align-items:flex-start;position:relative}
+.howto li>span{flex:none;position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:800 14px var(--body);color:#06202a;background:var(--teal);box-shadow:0 0 0 4px var(--night)}
+.howto li b{display:block;font:700 16px/1.3 var(--body)}
+.howto li small{display:block;font-size:14px;color:var(--mute);margin-top:2px}
+@media (max-width:860px){.intro{grid-template-columns:1fr}}
+
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.switch{display:none;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.switch button{font:700 14px var(--body);color:var(--mute);background:none;border:0;border-radius:9px;padding:9px 16px;cursor:pointer;min-height:40px}
+.switch button[aria-pressed="true"]{background:var(--teal);color:#06202a}
+.reset{font:700 14px var(--body);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-height:40px}
+.reset:hover{background:rgba(255,255,255,.08)}
+button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.note{font-size:13px;color:var(--mute)}
+
+.phones{display:flex;justify-content:center;gap:clamp(24px,5vw,72px);align-items:flex-start}
+.side{display:grid;gap:14px;justify-items:center;width:min(410px,100%);min-width:0}
+.label{display:flex;align-items:center;gap:10px;font:800 15px var(--body)}
+.label i{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
+.side.owner .label i{background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.label small{font-weight:600;color:var(--mute);font-size:13px}
+.device{position:relative;width:100%;border-radius:46px;padding:12px;background:#0b0f16;box-shadow:0 0 0 2px #2a3442,0 40px 80px rgba(0,0,0,.5),inset 0 0 0 2px #1a2230}
+.device iframe{display:block;width:100%;height:min(760px,calc(100vh - 110px));min-height:520px;border:0;border-radius:35px;background:#f5f6f8}
+
+.video{display:grid;gap:14px;justify-items:start}
+.video h2{font:800 clamp(26px,4vw,36px)/1.1 var(--display);margin:0;letter-spacing:-.5px}
+.video p{margin:0;color:var(--mute)}
+.video video{width:100%;max-width:100%;aspect-ratio:16/9;border-radius:18px;background:#000;box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+
+@media (max-width:860px){
+  .switch{display:inline-flex}
+  .phones .side[data-hide]{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="intro">
+    <div class="intro-text">
+      <div class="kick">Live demo</div>
+      <h1>Try both sides of the <em>shop app</em>.</h1>
+      <p>The customer app is what your shoppers use. The owner app is where you run your shop. They're connected, so whatever you do in one shows up in the other.</p>
+    </div>
+    <aside class="howto" aria-label="How to try it">
+      <div class="kick">How to try it</div>
+      <ol>
+        <li><span>1</span><div><b>Place an order in the shop</b><small>Pick an item and check out. No card needed.</small></div></li>
+        <li><span>2</span><div><b>Watch it arrive in the owner app</b><small>The sale and an alert show up in seconds.</small></div></li>
+        <li><span>3</span><div><b>Put an item on sale</b><small>Type a sale price in the owner app and the shop updates.</small></div></li>
+      </ol>
+    </aside>
+  </header>
+
+  <div class="bar">
+    <div class="switch" role="group" aria-label="Show which app">
+      <button type="button" data-show="shop" aria-pressed="true">Customer app</button>
+      <button type="button" data-show="owner" aria-pressed="false">Owner app</button>
+    </div>
+    <span class="note">Sample data only. No real payments, nothing leaves your browser.</span>
+    <button class="reset" id="reset" type="button">Reset demo</button>
+  </div>
+
+  <div class="phones">
+    <section class="side shop" data-side="shop" aria-label="Customer app">
+      <div class="label"><i></i>Customer app <small>what shoppers see</small></div>
+      <div class="device"><iframe id="f-shop" src="demo-shop.html" title="Customer shop app demo"></iframe></div>
+    </section>
+    <section class="side owner" data-side="owner" aria-label="Owner app" data-hide>
+      <div class="label"><i></i>Owner app <small>what you see</small></div>
+      <div class="device"><iframe id="f-owner" src="demo-owner.html" title="Shop owner app demo"></iframe></div>
+    </section>
+  </div>
+
+  <section class="video">
+    <div class="kick">Watch the tour</div>
+    <h2>The whole app in 60 seconds</h2>
+    <p>Scan, order, punch, join and run: the whole loop, from the counter QR code to the owner app.</p>
+    <video controls playsinline preload="metadata" poster="explainer-poster.jpg">
+      <source src="Shop-App-Explainer.mp4" type="video/mp4">
+      Your browser can't play this video. <a href="Shop-App-Explainer.mp4">Download it here</a>.
+    </video>
+  </section>
+</div>
+
+<script>
+(function () {
+  // Phone-size screens: show one app at a time.
+  const sides = document.querySelectorAll('.side'), btns = document.querySelectorAll('.switch button');
+  function showSide(name) {
+    sides.forEach(s => { if (s.dataset.side === name) s.removeAttribute('data-hide'); else s.setAttribute('data-hide', '') });
+    btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.show === name)));
+  }
+  btns.forEach(b => b.addEventListener('click', () => showSide(b.dataset.show)));
+
+  // Reset: clear the demo's saved data (sample orders, the shop's cart and punch card, owner sign-in) and reload both apps.
+  document.getElementById('reset').addEventListener('click', () => {
+    try {
+      Object.keys(localStorage).forEach(k => { if (k.startsWith('shopdemo:') || k.startsWith('shop:') || k === 'shop-owner-pw') localStorage.removeItem(k) });
+      Object.keys(sessionStorage).forEach(k => { if (k.startsWith('shop:') || k === 'shop-owner-pw') sessionStorage.removeItem(k) });
+    } catch (e) {}
+    ['f-shop', 'f-owner'].forEach(id => { const f = document.getElementById(id); try { f.contentWindow.location.reload() } catch (e) { f.src = f.getAttribute('src') } });
+  });
+})();
+</script>
+</body>
+</html>
